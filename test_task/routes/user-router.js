@@ -24,7 +24,11 @@ router.get('/:userId', userController.getUserById);
 
 router.delete('/:userId', userController.deleteUser);
 
-router.patch('/:userId', checkAccessToken, checkUserUpdateValidity, userController.updateUser);
+router.patch('/:userId',
+    checkAccessToken,
+    checkUserUpdateValidity,
+    userController.updateUser
+);
 
 router.get('/:userId/photos', userController.getAllUserPhotos);
 

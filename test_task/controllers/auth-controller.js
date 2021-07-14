@@ -70,6 +70,7 @@ module.exports = {
       const { email, newPassword } = req.body;
 
       const { passwordToken: pass } = await authService.generatePasswordChangeToken();
+      const hashedPassword = await passwordHasher.hash(newPassword);
 
       await Users.updateOne({ email }, { passwordToken: pass });
 
@@ -79,7 +80,7 @@ module.exports = {
         {
           userName: user.name,
           link: user.passwordToken,
-          password: newPassword
+          password: hashedPassword
         });
 
       res.status(statusCode.OK).json(successResult.CHECK_EMAIL);

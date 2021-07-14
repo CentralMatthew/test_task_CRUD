@@ -158,9 +158,8 @@ module.exports = {
       const { _id } = req.user;
       const { newPassword } = req.params;
 
-      const hashedPassword = await passwordHasher.hash(newPassword);
 
-      await Users.updateOne({ _id }, { password: hashedPassword });
+      await Users.updateOne({ _id }, { password: newPassword });
 
       next();
     } catch (e) {
