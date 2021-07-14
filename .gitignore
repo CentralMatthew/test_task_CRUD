@@ -1,0 +1,5 @@
+# Project exclude paths
+/node_modules/
+test_task/.env
+.idea
+package-lock.json
