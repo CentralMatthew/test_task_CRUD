@@ -25,24 +25,6 @@ module.exports = {
     }
   },
 
-  // checkIsUserDeleted: async (req, res, next) => {
-  //   try {
-  //     const { email } = req.body;
-  //     const user = await Users.findOne({ email });
-  //
-  //     if (user.deleted) {
-  //       throw new ErrorHandler(
-  //         statusCode.CONFLICT,
-  //         EMAIL_IS_NOT_AVAILABLE.message,
-  //         EMAIL_IS_NOT_AVAILABLE.code
-  //       );
-  //     }
-  //
-  //     next();
-  //   } catch (e) {
-  //     next(e);
-  //   }
-  // },
 
   checkUserValidity: (req, res, next) => {
     try {
