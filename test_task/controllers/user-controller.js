@@ -8,7 +8,8 @@ const { Users } = require('../dataBase');
 const {
   statusCode,
   emailActionEnum: { REGISTRATION, UPDATE, DELETE },
-  successResult: { SUCCESS_ADDED_PHOTO, SUCCESS_CHANGED_AVATAR, SUCCESS_ADDED_DOCUMENT }
+  mailConstant: { DELETE_EMAIL },
+  successResult: { SUCCESS_ADDED_PHOTO, SUCCESS_CHANGED_AVATAR, SUCCESS_ADDED_DOCUMENT },
 } = require('../constants');
 
 const { UPDATED } = require('../constants/successResults');
@@ -85,7 +86,7 @@ module.exports = {
 
       await mailService.sendMail(email, DELETE, { userName: name });
 
-      await Users.updateOne({ _id: userId }, { email: 'mee@whatever.com_deleted' });
+      await Users.updateOne({ _id: userId }, { email: DELETE_EMAIL });
 
       user.delete();
 
