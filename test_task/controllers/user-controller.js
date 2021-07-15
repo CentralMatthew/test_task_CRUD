@@ -83,13 +83,15 @@ module.exports = {
 
       const user = await Users.findById({ _id: userId });
 
-      user.delete();
-
       await mailService.sendMail(email, DELETE, { userName: name });
+
+      await Users.updateOne({ _id: userId }, { email: 'mee@whatever.com_deleted' });
+
+      user.delete();
 
       await _dirRemover(userId, 'users');
 
-      res.status(statusCode.NO_CONTENT).json('Success').end();
+      res.status(statusCode.NO_CONTENT).end();
     } catch (e) {
       next(e);
     }
@@ -109,6 +111,7 @@ module.exports = {
       next(e);
     }
   },
+
 
   getAllUserPhotos: (req, res, next) => {
     try {

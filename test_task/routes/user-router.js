@@ -22,7 +22,7 @@ router.use('/:userId', getUserByDynamicParam('userId', 'params', '_id'));
 
 router.get('/:userId', userController.getUserById);
 
-router.delete('/:userId', userController.deleteUser);
+router.delete('/:userId', checkAccessToken ,userController.deleteUser);
 
 router.patch('/:userId',
     checkAccessToken,
