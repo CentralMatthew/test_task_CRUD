@@ -1,7 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-const uuid = require('uuid').v1;
-const { promisify } = require('util');
 
 const { Users } = require('../dataBase');
 
@@ -15,11 +11,8 @@ const {
 const { UPDATED } = require('../constants/successResults');
 
 const {
-  passwordHasher, mailService, userService, authService
+  passwordHasher, mailService, userService, authService, directoryService
 } = require('../services');
-
-const mkDirPromise = promisify(fs.mkdir);
-const rmDirPromise = promisify(fs.rmdir);
 
 module.exports = {
 
@@ -60,12 +53,13 @@ module.exports = {
       const { email, _id } = user;
 
       if (avatar) {
-        const { finalPath, dirPath } = await _dirBuilder('photos', avatar.name, _id, 'users');
+        const { finalPath, dirPath } = await directoryService._dirBuilder('photos', avatar.name, _id, 'users');
         await avatar.mv(finalPath);
 
         await Users.updateOne({ _id }, { $set: { avatar: dirPath } });
         await Users.updateOne({ _id }, { $push: { gallery: dirPath } });
       }
+
 
       const normalizedUser = userService.userNormalizator(user.toObject());
 
@@ -90,7 +84,7 @@ module.exports = {
 
       user.delete();
 
-      await _dirRemover(userId, 'users');
+      await directoryService._dirRemover(userId, 'users');
 
       res.status(statusCode.NO_CONTENT).end();
     } catch (e) {
@@ -140,7 +134,7 @@ module.exports = {
       const { _id } = req.user;
 
       if (avatar) {
-        const { finalPath, dirPath } = await _dirBuilder('photos', avatar.name, _id, 'users');
+        const { finalPath, dirPath } = await directoryService._dirBuilder('photos', avatar.name, _id, 'users');
 
         await avatar.mv(finalPath);
 
@@ -163,7 +157,7 @@ module.exports = {
 
       if (photo.length) {
         for await (const image of photo) {
-          const { finalPath, dirPath } = await _dirBuilder('photos', image.name, _id, 'users');
+          const { finalPath, dirPath } = await directoryService._dirBuilder('photos', image.name, _id, 'users');
 
           await image.mv(finalPath);
 
@@ -185,7 +179,7 @@ module.exports = {
       const { _id } = req.user;
 
       if (document) {
-        const { finalPath, dirPath } = await _dirBuilder('documents', document.name, _id, 'users');
+        const { finalPath, dirPath } = await directoryService._dirBuilder('documents', document.name, _id, 'users');
         await document.mv(finalPath);
 
         await Users.updateOne({ _id }, { $push: { documents: dirPath } });
@@ -199,24 +193,24 @@ module.exports = {
 
 };
 
-async function _dirBuilder(dirName, fileName, itemdId, itemType) {
-  const pathWithoutStatic = path.join(itemType, itemdId.toString(), dirName);
-  const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
-
-  const fileExtension = fileName.split('.').pop();
-  const newFileName = `${uuid()}.${fileExtension}`;
-  const finalPath = path.join(uploadPath, newFileName);
-
-  await mkDirPromise(uploadPath, { recursive: true });
-
-  return {
-    finalPath,
-    dirPath: path.join(pathWithoutStatic, newFileName)
-  };
-}
-
-async function _dirRemover(itemdId, itemType) {
-  const pathWithoutStatic = path.join(itemType, itemdId.toString());
-  const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
-  await rmDirPromise(uploadPath, { recursive: true });
-}
+// async function _dirBuilder(dirName, fileName, itemdId, itemType) {
+//   const pathWithoutStatic = path.join(itemType, itemdId.toString(), dirName);
+//   const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
+//
+//   const fileExtension = fileName.split('.').pop();
+//   const newFileName = `${uuid()}.${fileExtension}`;
+//   const finalPath = path.join(uploadPath, newFileName);
+//
+//   await mkDirPromise(uploadPath, { recursive: true });
+//
+//   return {
+//     finalPath,
+//     dirPath: path.join(pathWithoutStatic, newFileName)
+//   };
+// }
+//
+// async function _dirRemover(itemdId, itemType) {
+//   const pathWithoutStatic = path.join(itemType, itemdId.toString());
+//   const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
+//   await rmDirPromise(uploadPath, { recursive: true });
+// }

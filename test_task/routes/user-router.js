@@ -34,10 +34,10 @@ router.get('/:userId/photos', userController.getAllUserPhotos);
 
 router.get('/:userId/documents', userController.getUserDocuments);
 
-router.post('/:userId/avatar', checkFiles, userController.changeUserAvatar);
+router.post('/:userId/avatar', checkFiles, checkAccessToken, userController.changeUserAvatar);
 
-router.post('/:userId/photos', checkFiles, userController.addPhotoToGallery);
+router.post('/:userId/photos', checkFiles,checkAccessToken, userController.addPhotoToGallery);
 
-router.post('/:userId/documents', checkFiles, userController.addUserDocument);
+router.post('/:userId/documents', checkFiles,checkAccessToken , userController.addUserDocument);
 
 module.exports = router;
