@@ -193,24 +193,3 @@ module.exports = {
 
 };
 
-// async function _dirBuilder(dirName, fileName, itemdId, itemType) {
-//   const pathWithoutStatic = path.join(itemType, itemdId.toString(), dirName);
-//   const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
-//
-//   const fileExtension = fileName.split('.').pop();
-//   const newFileName = `${uuid()}.${fileExtension}`;
-//   const finalPath = path.join(uploadPath, newFileName);
-//
-//   await mkDirPromise(uploadPath, { recursive: true });
-//
-//   return {
-//     finalPath,
-//     dirPath: path.join(pathWithoutStatic, newFileName)
-//   };
-// }
-//
-// async function _dirRemover(itemdId, itemType) {
-//   const pathWithoutStatic = path.join(itemType, itemdId.toString());
-//   const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
-//   await rmDirPromise(uploadPath, { recursive: true });
-// }
