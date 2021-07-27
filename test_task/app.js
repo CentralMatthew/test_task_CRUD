@@ -1,4 +1,3 @@
-const cors = require('cors');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const path = require('path');
@@ -15,7 +14,7 @@ const app = express();
 const staticDir = path.join(__dirname, 'static');
 
 _moongoseConnector();
-app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

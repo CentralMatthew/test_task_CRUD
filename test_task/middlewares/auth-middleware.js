@@ -158,7 +158,6 @@ module.exports = {
       const { _id } = req.user;
       const { newPassword } = req.params;
 
-
       await Users.updateOne({ _id }, { password: newPassword });
 
       next();
